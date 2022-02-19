@@ -1,16 +1,18 @@
 class FetchDataService {
     constructor() {}
 
-    url = "http://localhost:8080/";
+    url = "http://localhost:8080/api/sales-points";
 
-    getListOfGasStation = (( limit = 5, road= null, distance= null, price= null, fuel= null, callBack, errorCallBack) => {
-        let request = '?limit=${limit}';
-        if(road != null) { request = request + '&road=' + road }
-        if(distance != null) { request = request + '&distance=' + distance }
-        if(price != null) { request = request + '&price=' + price }
-        if(fuel != null) { request = request + '&fuel=' + fuel }
+    getListOfGasStation = ((callBack, errorCallBack, limit = null, road= null, distance= null, lat= null, long= null, price= null, fuel= null) => {
+        const url = new URL(this.url);
+        if(limit != null) { url.searchParams.append('limit', limit);}
+        if(road != null) { url.searchParams.append('road', road); }
+        if(distance != null) { url.searchParams.append('distance', distance); url.searchParams.append('latitude', lat); url.searchParams.append('longitude', long); }
+        if(price != null) { url.searchParams.append('price', price); }
+        if(fuel != null) { url.searchParams.append('fuel', fuel); }
 
-        fetch(`http://localhost:8080/api/sales-points${request}`)
+        console.log(url)
+        fetch(url)
             .then((response) => response.json())
             .then((jsonResponse) => {
                 callBack(jsonResponse);
