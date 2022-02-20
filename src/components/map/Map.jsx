@@ -5,7 +5,6 @@ import { MarkerModel } from "../model/markerModel";
 import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet'
 import LocationMarker from "../../components/locationMarker/LocationMarker";
 import {fetchDataService} from "../../service/fetchData.service";
-import { mathService } from "../../service/math.service";
 
 // import 'leaflet/dist/leaflet.css';
 import './Map.css';
@@ -21,7 +20,7 @@ function MapCenter() {
     const callBack = (jsonResponse) => {
         let markers = [];
         jsonResponse.forEach(element => {
-            let next = new MarkerModel(element.position.coordinates[1] , element.position.coordinates[0] , element.id);
+            let next = new MarkerModel(element.position.coordinates[1] , element.position.coordinates[0] , element.address.city);
             markers.push(next.render())
         })
         setResults(markers);
@@ -37,12 +36,14 @@ function MapCenter() {
       dragend: (e) => {
         const bounds = e.target.getBounds()
         const center = e.target.getCenter()
-        fetchDataService.getListOfGasStation(callBack, errorCallBack, null, null, mathService.distanceBeetweenPoints(bounds._southWest.lat,bounds._southWest.lng, bounds._northEast.lat, bounds._northEast.lng), center.lat, center.lng, null, null)
+        bounds._southWest.distanceTo(bounds._northEast)
+        fetchDataService.getListOfGasStation(callBack, errorCallBack, 1000, null, bounds._southWest.distanceTo(bounds._northEast), center.lat, center.lng, null, null)
       }, 
       zoomend: (e) => {
         const bounds = e.target.getBounds()
         const center = e.target.getCenter()
-        fetchDataService.getListOfGasStation(callBack, errorCallBack, null, null, mathService.distanceBeetweenPoints(bounds._southWest.lat,bounds._southWest.lng, bounds._northEast.lat, bounds._northEast.lng), center.lat, center.lng, null, null)
+        console.log(bounds._southWest.distanceTo(center))
+        fetchDataService.getListOfGasStation(callBack, errorCallBack, 1000, null, bounds._southWest.distanceTo(bounds._northEast), center.lat, center.lng, null, null)
       }
     });
     if(isLoaded)
@@ -62,7 +63,7 @@ export default function Map(props){
         setIsLoaded(true);
         let markers = [];
         jsonResponse.forEach(element => {
-            let next = new MarkerModel(element.position.coordinates[1] , element.position.coordinates[0] , element.id);
+            let next = new MarkerModel(element.position.coordinates[1] , element.position.coordinates[0] ,  element.address.city);
             markers.push(next.render())
         })
         setResults(markers);
