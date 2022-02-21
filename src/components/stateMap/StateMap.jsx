@@ -7,8 +7,12 @@ import {
  } from "react-router-dom";
 import { Back } from "../back/Back";
 import { DisplayName } from "../displayName/DisplayName";
-import { Row } from "react-bootstrap";
+import 'bootstrap/dist/css/bootstrap.css';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Table from 'react-bootstrap/Table';
 import "./StateMap.css";
+import { depStatisticsService } from "../../service/depStatistics.service";
 
 function StateMap({localisation}){
    
@@ -21,8 +25,18 @@ function StateMap({localisation}){
    const [left, setLeft] = useState(-500);
 
    const [textNameTooltip, setTextNameTooltip] = useState("");   
-   const [textDataTooltip, setTextDataTooltip] = useState("");
+   const [gasPrices, setGasPrices] = useState([]);
+   const [setError] = useState(null);
+   const [isLoaded, setIsLoaded] = useState(true);
+    
+    const callBack = (jsonResponse) => {
+        setIsLoaded(true);
+    }
 
+    const errorCallBack = (error) => {
+        setIsLoaded(true);
+        setError(error);
+    }
 
 
    let styleTooltip = {
@@ -39,6 +53,8 @@ function StateMap({localisation}){
    let data = location.pathname === '/stateMap' ? france : regionFolder(`./${location.state.regionName}.json`); 
 
    useEffect(() => {
+      depStatisticsService.getAllDepartmentStats(callBack, errorCallBack)
+
       const svg = select(svgRef.current);
 
       if(location.pathname === '/stateMap'){
@@ -59,24 +75,28 @@ function StateMap({localisation}){
             if(location.pathname === '/stateMap'){
                setOpacity(0);
                setTextNameTooltip("");
-               setTextDataTooltip("");
                svg.selectAll("g").remove();
-               navigate('/regionsMap', {
+               navigate('/regionMap', {
                   state: {regionName : d.target.__data__.properties.nom}
                });
             }
-            else if(location.pathname === '/regionsMap'){
-               navigate('/departements', {
+            else if(location.pathname === '/regionMap'){
+             /*  navigate('/departement', {
                   state: {libelle : d.target.__data__.properties.nom}
-               });
+               }); */
             }
             
 
             
          })
          .on("mouseover", function(d) {
+            
             if( location.pathname === '/stateMap'){
                setTextNameTooltip(`Région : ${d.target.__data__.properties.nom}`);
+            } else if ( location.pathname === '/regionMap') {
+               setTextNameTooltip(`Département : ${d.target.__data__.properties.nom} - ${d.target.__data__.properties.code}`);
+               const depStats = depStatisticsService.departLastDataLoader(d.target.__data__.properties.code);
+               setGasPrices(depStats.prices);
             }
             setOpacity(0.9);
             var x = d.clientX;
@@ -86,9 +106,9 @@ function StateMap({localisation}){
             
         })
         .on("mouseout", function(d) {
-            setOpacity(0);
-            setTextNameTooltip("");  
-            setTextDataTooltip("");
+            setOpacity(0); 
+            setTextNameTooltip(""); 
+            setGasPrices([]);
         });
 
         if(localisation !== undefined && localisation!== null){
@@ -101,24 +121,51 @@ function StateMap({localisation}){
                .append("circle") 
                .attr("r", 5)
         }
-   } , [textDataTooltip, navigate,data,location,localisation]);
+   } , [navigate,data,location,localisation]);
 
 
-   return (
-      <div className="displayName">
-         <DisplayName />
-         <div ref={wrapperRef} style={{marginBottom: "2rem"}}>
-            <svg ref={svgRef}>
-               <g></g>
-            </svg>
-            <Row style={styleTooltip.container}>
-               <h3>{textNameTooltip}</h3>
+   if (isLoaded) {
+      return (
+         <div className="regionMap">
+            <Row>
+               <Col>
+                  <DisplayName />
+                  <div ref={wrapperRef} style={{marginBottom: "2rem"}}>
+                     <svg ref={svgRef}>
+                        <g></g>
+                     </svg>
+                  </div>
+               </Col>
+               <Col>
+                  <Row>
+                     <h3 className ="text-center">{textNameTooltip}</h3>
+                     <Table striped bordered hover>
+                        <thead>
+                           <tr>
+                              <th>Carburant</th>
+                              <th>Prix moyen</th>
+                           </tr>
+                        </thead>                     
+                        <tbody>
+                           {gasPrices.map(price => (
+                              <tr>
+                                 <td>{price.name}</td> 
+                                 <td>{price.value} euros</td>
+                              </tr>
+                           ))}
+                        </tbody>
+                     </Table>
+                  </Row>
+               </Col>
+            </Row>
+            <Row>
+               <div>{location.pathname ==='/regionMap' ? <Back />  : <></>}</div>
             </Row>
          </div>
-         {location.pathname ==='/regionsMap' ? <Back />  : <></>}
-      </div>
-   )
-
+      )
+   } else {
+      return null;
+   }
 }
 
 export default StateMap;

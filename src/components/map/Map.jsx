@@ -21,30 +21,7 @@ function MapCenter() {
     
     const callBack = (jsonResponse) => {
         let markers = [];
-        // if(jsonResponse.length < LIMIT) {
-        //     jsonResponse.forEach(element => {
-        //         let next = new MarkerModel(element.position.coordinates[1] , element.position.coordinates[0] , element.address.city);
-        //         markers.push(next.render())
-        //     })
-        // }else{
-        //     const PASSCONST = jsonResponse.length;
-        //     let moyenneX = 0;
-        //     let moyenneY = 0;
-        //     let i = 0;
-        //     jsonResponse.forEach(element => {
-        //         moyenneX += element.position.coordinates[1];
-        //         moyenneY += element.position.coordinates[0];
-        //         if(i%PASSCONST === 0){
-        //             let next = new MarkerModel(moyenneX/PASSCONST , moyenneY/PASSCONST , "");
-        //             console.log(next)
-        //             markers.push(next.render())
-        //             moyenneX = 0;
-        //             moyenneY = 0;
-        //         }
-        //         i++;
-        //     })
-        // }
-        
+
         jsonResponse.forEach(element => {
             let next = new MarkerModel(element.position.coordinates[1] , element.position.coordinates[0] , element.address.city);
             markers.push(next.render())

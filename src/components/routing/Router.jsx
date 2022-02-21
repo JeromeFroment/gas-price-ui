@@ -18,7 +18,7 @@ export default function RouterFunction() {
         <Route path="/" element={<Navigate to="/map"/>} />
         <Route path="/map" element={<MapAccess />} />
         <Route path="/stateMap" element={<StatisticsAccess />} />
-        <Route path="/regionsMap" element={<StatisticsAccess />} />
+        <Route path="/regionMap" element={<StatisticsAccess />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
