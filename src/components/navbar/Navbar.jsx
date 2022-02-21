@@ -10,10 +10,10 @@ const Navbar = () => {
     <>
       <Nav>
         <NavMenu>
-          <NavLink to='/'>
+          <NavLink to='/map'>
             Map
           </NavLink>
-          <NavLink to='/statistics'>
+          <NavLink to='/stateMap'>
             Statistics
           </NavLink>
         </NavMenu>
