@@ -8,6 +8,7 @@ import {
 import { Back } from "../back/Back";
 import { DisplayName } from "../displayName/DisplayName";
 import { Row } from "react-bootstrap";
+import "./StateMap.css";
 
 function StateMap({localisation}){
    
@@ -104,7 +105,7 @@ function StateMap({localisation}){
 
 
    return (
-      <div>
+      <div className="displayName">
          <DisplayName />
          <div ref={wrapperRef} style={{marginBottom: "2rem"}}>
             <svg ref={svgRef}>
