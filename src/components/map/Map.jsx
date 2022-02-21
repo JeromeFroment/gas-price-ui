@@ -10,47 +10,38 @@ import MarkerClusterGroup from "react-leaflet-markercluster"
 // import 'leaflet/dist/leaflet.css';
 import './Map.css';
 import { useEffect } from "react";
+import { colors } from "../model/colorsGasStation";
 
-import L from 'leaflet';
 const LIMIT = 1000;
 
 function MapCenter() {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [gasStation, setResults] = useState([]);
+    const [distance, setDistance] = useState(null);
+    const [lastCenter, setCenter] = useState([]);
     
     const callBack = (jsonResponse) => {
         let markers = [];
-        // if(jsonResponse.length < LIMIT) {
-        //     jsonResponse.forEach(element => {
-        //         let next = new MarkerModel(element.position.coordinates[1] , element.position.coordinates[0] , element.address.city);
-        //         markers.push(next.render())
-        //     })
-        // }else{
-        //     const PASSCONST = jsonResponse.length;
-        //     let moyenneX = 0;
-        //     let moyenneY = 0;
-        //     let i = 0;
-        //     jsonResponse.forEach(element => {
-        //         moyenneX += element.position.coordinates[1];
-        //         moyenneY += element.position.coordinates[0];
-        //         if(i%PASSCONST === 0){
-        //             let next = new MarkerModel(moyenneX/PASSCONST , moyenneY/PASSCONST , "");
-        //             console.log(next)
-        //             markers.push(next.render())
-        //             moyenneX = 0;
-        //             moyenneY = 0;
-        //         }
-        //         i++;
-        //     })
-        // }
-        
-        jsonResponse.forEach(element => {
-            let next = new MarkerModel(element.position.coordinates[1] , element.position.coordinates[0] , element.address.city);
-            markers.push(next.render())
-        })
-        setResults(markers);
-        setIsLoaded(true);
+        if(jsonResponse.length < LIMIT) {
+            jsonResponse.forEach(element => {
+                let next = new MarkerModel(element.position.coordinates[1] , element.position.coordinates[0] , element.address.city);
+                markers.push(next.render())
+            })
+            setResults(markers);
+            setIsLoaded(true);
+        }else{
+            if(lastCenter.lat && lastCenter.lng){
+                fetchDataService.getListOfGasStation((jsonResponse)=>{
+                    console.log(jsonResponse.length)
+                    console.log(lastCenter.lat +" " + lastCenter.lng)
+                    let next = new MarkerModel(lastCenter.lat, lastCenter.lng, "Zoom to see the " + jsonResponse.length + " gas stations", colors.ZOOM, [50,50]);
+                    markers.push(next.render())
+                    setResults(markers);
+                    setIsLoaded(true);
+                }, errorCallBack,  null, null, distance, lastCenter.lat, lastCenter.lng, null, null)
+            }
+        }
     }
 
     const errorCallBack = (error) => {
@@ -64,14 +55,18 @@ function MapCenter() {
 
     const map = useMapEvents({
       dragend: (e) => {
-        const bounds = e.target.getBounds()
-        const center = e.target.getCenter()
-        // fetchDataService.getListOfGasStation(callBack, errorCallBack,  null, null, bounds._southWest.distanceTo(bounds._northEast), center.lat, center.lng, null, null)
+        const bounds = e.target.getBounds();
+        const center = e.target.getCenter();
+        setDistance(bounds._southWest.distanceTo(bounds._northEast))
+        setCenter(center)
+        fetchDataService.getListOfGasStation(callBack, errorCallBack,  LIMIT, null, bounds._southWest.distanceTo(bounds._northEast), center.lat, center.lng, null, null)
       }, 
       zoomend: (e) => {
-        const bounds = e.target.getBounds()
-        const center = e.target.getCenter()
-        // fetchDataService.getListOfGasStation(callBack, errorCallBack, null, null, bounds._southWest.distanceTo(bounds._northEast), center.lat, center.lng, null, null)
+        const bounds = e.target.getBounds();
+        const center = e.target.getCenter();
+        setDistance(bounds._southWest.distanceTo(bounds._northEast))
+        setCenter(center)
+        fetchDataService.getListOfGasStation(callBack, errorCallBack, LIMIT, null, bounds._southWest.distanceTo(bounds._northEast), center.lat, center.lng, null, null)
       }
     });
 
@@ -91,29 +86,10 @@ export default function Map(props){
     const [isLoaded, setIsLoaded] = useState(false);
     const [gasStation, setResults] = useState([]);
 
+    const center= React.createRef()
+
     const navigate = useNavigate();
 
-    const callBack = (jsonResponse) => {
-        let markers = [];
-        
-        jsonResponse.forEach(element => {
-            let next = new MarkerModel(element.position.coordinates[1] , element.position.coordinates[0] , element.address.city);
-            markers.push(next.render())
-        })
-        setResults(markers);
-        setIsLoaded(true);
-    }
-
-    const errorCallBack = (error) => {
-        setIsLoaded(true);
-        setError(error);
-    }
-
-    useEffect(() => {
-        fetchDataService.getListOfGasStation(callBack, errorCallBack,  null, null, null, null, null, null, null)
-    }, [])
-
-    if(!isLoaded){return <div>Loading...</div>}
     return (
         <>  
             <div id="map" style={{height: '100%'}}>
