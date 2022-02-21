@@ -5,12 +5,14 @@ import { MarkerModel } from "../model/markerModel";
 import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet'
 import LocationMarker from "../../components/locationMarker/LocationMarker";
 import {fetchDataService} from "../../service/fetchData.service";
+import MarkerClusterGroup from "react-leaflet-markercluster"
 
 // import 'leaflet/dist/leaflet.css';
 import './Map.css';
 import { useEffect } from "react";
 
 import L from 'leaflet';
+const LIMIT = 1000;
 
 function MapCenter() {
     const [error, setError] = useState(null);
@@ -19,6 +21,30 @@ function MapCenter() {
     
     const callBack = (jsonResponse) => {
         let markers = [];
+        // if(jsonResponse.length < LIMIT) {
+        //     jsonResponse.forEach(element => {
+        //         let next = new MarkerModel(element.position.coordinates[1] , element.position.coordinates[0] , element.address.city);
+        //         markers.push(next.render())
+        //     })
+        // }else{
+        //     const PASSCONST = jsonResponse.length;
+        //     let moyenneX = 0;
+        //     let moyenneY = 0;
+        //     let i = 0;
+        //     jsonResponse.forEach(element => {
+        //         moyenneX += element.position.coordinates[1];
+        //         moyenneY += element.position.coordinates[0];
+        //         if(i%PASSCONST === 0){
+        //             let next = new MarkerModel(moyenneX/PASSCONST , moyenneY/PASSCONST , "");
+        //             console.log(next)
+        //             markers.push(next.render())
+        //             moyenneX = 0;
+        //             moyenneY = 0;
+        //         }
+        //         i++;
+        //     })
+        // }
+        
         jsonResponse.forEach(element => {
             let next = new MarkerModel(element.position.coordinates[1] , element.position.coordinates[0] , element.address.city);
             markers.push(next.render())
@@ -32,22 +58,30 @@ function MapCenter() {
         setError(error);
     }
 
+    useEffect(() => {
+        fetchDataService.getListOfGasStation(callBack, errorCallBack,  null, null, null, null, null, null, null)
+    }, [])
+
     const map = useMapEvents({
       dragend: (e) => {
         const bounds = e.target.getBounds()
         const center = e.target.getCenter()
-        bounds._southWest.distanceTo(bounds._northEast)
-        fetchDataService.getListOfGasStation(callBack, errorCallBack, 1000, null, bounds._southWest.distanceTo(bounds._northEast), center.lat, center.lng, null, null)
+        // fetchDataService.getListOfGasStation(callBack, errorCallBack,  null, null, bounds._southWest.distanceTo(bounds._northEast), center.lat, center.lng, null, null)
       }, 
       zoomend: (e) => {
         const bounds = e.target.getBounds()
         const center = e.target.getCenter()
-        console.log(bounds._southWest.distanceTo(center))
-        fetchDataService.getListOfGasStation(callBack, errorCallBack, 1000, null, bounds._southWest.distanceTo(bounds._northEast), center.lat, center.lng, null, null)
+        // fetchDataService.getListOfGasStation(callBack, errorCallBack, null, null, bounds._southWest.distanceTo(bounds._northEast), center.lat, center.lng, null, null)
       }
     });
+
     if(isLoaded)
-        return (<>{gasStation}</>);
+        return (
+        <>
+            <MarkerClusterGroup>
+                {gasStation}
+            </MarkerClusterGroup>
+        </>);
     else
         return null;
   }
@@ -60,13 +94,14 @@ export default function Map(props){
     const navigate = useNavigate();
 
     const callBack = (jsonResponse) => {
-        setIsLoaded(true);
         let markers = [];
+        
         jsonResponse.forEach(element => {
-            let next = new MarkerModel(element.position.coordinates[1] , element.position.coordinates[0] ,  element.address.city);
+            let next = new MarkerModel(element.position.coordinates[1] , element.position.coordinates[0] , element.address.city);
             markers.push(next.render())
         })
         setResults(markers);
+        setIsLoaded(true);
     }
 
     const errorCallBack = (error) => {
@@ -74,26 +109,9 @@ export default function Map(props){
         setError(error);
     }
 
-    useEffect(()=>{
-        
-        // fetchDataService.getListOfGasStation(callBack, errorCallBack, null, null, 100, location.position.lat, location.position.lng, null, null)
-        fetchDataService.getListOfGasStation(callBack, errorCallBack, 10, null, null, null, null, null, null)
+    useEffect(() => {
+        fetchDataService.getListOfGasStation(callBack, errorCallBack,  null, null, null, null, null, null, null)
     }, [])
-
-    const handleDragEnd = (e) => {
-        console.log(e)
-        console.log("HELLO")
-    }
-
-    const state = {
-        position: (props.position) ? props.position : [43.27, 5.40],
-        markers: props.markers
-    }
-    
-    let markersRender = []
-    for(let marker of state.markers){
-        markersRender.push(marker.render(gasStation))
-    }
 
     if(!isLoaded){return <div>Loading...</div>}
     return (
@@ -104,27 +122,15 @@ export default function Map(props){
                     return <div>Erreur lors du chargement des données : {error.toString()} </div>
                 }
             })()}
-                <MapContainer center={state.position} zoom={9} onDragend={handleDragEnd}>
+                <MapContainer center={[43.27, 5.40]} zoom={9}>
                     <MapCenter/>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
                     <LocationMarker/>
-                    {/* {gasStation} */}
-                    {markersRender}
                 </MapContainer>
             </div>
         </>
     )
 }
-
-/* <Button onClick={() => {
-                // JE SAIS PAS ENCORE FAIRE DE TESTS AVEC REACT ALORS LAISSEZ MOI ESSAYER
-                const listOfGasStationNoArg = getListOfGasStation();
-                const listOfGasStationLim = getListOfGasStation(5);
-                const listOfGasStationRoad = getListOfGasStation(5, "RD 93 GRANDE RUE");
-                const listOfGasStationDistance = getListOfGasStation(5, "RD 93 GRANDE RUE", 3);
-                const listOfGasStationPrice = getListOfGasStation(5, null, null, 1.5);
-                const listOfGasStationFuel = getListOfGasStation(5, null, null, null, "SP98");
-} } */
