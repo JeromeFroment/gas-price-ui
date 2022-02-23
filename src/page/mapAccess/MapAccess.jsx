@@ -7,6 +7,7 @@ import { colors } from "../../components/model/colorsGasStation";
 
 
 export function MapAccess () {
+
     return (
         <div id="map-access">
             <h1>Map selection</h1>
