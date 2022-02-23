@@ -1,8 +1,8 @@
 import React from 'react';
 import { MapAccess } from "../../page/mapAccess/MapAccess";
 import NotFound from "../notFound/NotFound";
-import Navbar from "../navbar/Navbar";
 import { StatisticsAccess } from "../../page/statisticsAccess/StatisticsAccess";
+import Navbar from "../navbar/Navbar";
 import {
   BrowserRouter,
   Routes,
@@ -11,11 +11,11 @@ import {
 } from "react-router-dom";
 
 
-export default function RouterFunction() {
+export default function RouterFunction(props) {
 
   return (
     <BrowserRouter>
-      <Navbar />
+      <Navbar theme={props.theme} switchTheme={props.switchTheme}/>
       <Routes>
         <Route path="/" element={<Navigate to="/map"/>} />
         <Route path="/map" element={<MapAccess />} />

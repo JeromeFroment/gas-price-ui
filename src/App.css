@@ -1,8 +1,19 @@
 .App {
-  width: 100%;
-  height: 100%;
+  color: var(--text-primary);
+  background-color: var(--background);
+  font-size: large;
+  font-weight: bold;
+  height: calc(100vh);
+  transition: all .5s;
 }
 
+button {
+  color: var(--text-primary);
+  background-color: var(--background);
+  border: 2px var(--text-primary) solid;
+  float: right;
+  transition: all .5s;
+}
 
 .header {
   position: fixed;
@@ -25,9 +36,10 @@ svg {
   display: block;
   width: 33em;
   height: 30em;
+  fill: var(--text-primary);
 }
 svg .region:hover {
-  stroke: white;
+  stroke: var(--accent);
   stroke-width: 1px;
   cursor: pointer;
 }

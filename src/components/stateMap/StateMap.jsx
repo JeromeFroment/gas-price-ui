@@ -22,8 +22,6 @@ function StateMap({localisation}){
    const [textNameTooltip, setTextNameTooltip] = useState("");   
    const [textDataTooltip, setTextDataTooltip] = useState("");
 
-
-
    let styleTooltip = {
         container: {
             opacity: opacity,
@@ -52,6 +50,7 @@ function StateMap({localisation}){
       svg.selectAll("path")
          .data(data.features)
          .join("path")
+         .attr("class", "d3map")
          .attr("class","region")
          .attr("d", feature => pathGenerator(feature))
          .on("click", function(d) {
