@@ -41,7 +41,7 @@ function MapCenter(props) {
                 setResults(markers);
                 setIsLoaded(true);
                 props.childIsLoaad(true);
-        }else{
+        }else if (jsonResponse.length != undefined){
             if(lastCenter.lat && lastCenter.lng){
                 fetchDataService.getListOfGasStation((jsonResponse)=>{
                     let next = new MarkerModel(lastCenter.lat, lastCenter.lng, "Zoom to see the " + jsonResponse.length + " gas stations", colors.ZOOM, [50,50]);
