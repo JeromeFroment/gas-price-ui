@@ -8,11 +8,12 @@ export class MarkerModel{
     long;
     text;
     color;
+    size;
 
     buildIcon(){
         return L.icon({
             iconUrl: this.color,
-            iconSize:     [38, 38], // size of the icon
+            iconSize:     this.size, // size of the icon
             shadowSize: [38,38],
             shadowAnchor: [19,38],
             iconAnchor:   [19,38], // point of the icon which will correspond to marker's location
@@ -24,10 +25,11 @@ export class MarkerModel{
         return <Marker position={[this.lat, this.long]} icon={this.buildIcon()}><Popup>{this.text}</Popup></Marker>
     }
 
-    constructor(lat, long, text, color = colors.PINK){
+    constructor(lat, long, text, color = colors.PINK, size = [38, 38]){
         this.lat = lat;
         this.long = long;
         this.text = text;
         this.color = color
+        this.size = size
     }
 }
