@@ -32,7 +32,26 @@ export default function MapParameters(props){
     }
 
     const search = () => {
+        let limitRequest = null;
+        let roadRequest = null;
+        let distanceRequest = null;
+        let priceRequest = null;
+        let fuelRequest = null;
+        if(limit > 0) { limitRequest = limit }
+        if(road != "") { roadRequest = road }
+        if(distance > 0) { distanceRequest = distance }
+        if(price > 0) { priceRequest = price }
+        if(fuel != "") { fuelRequest = fuel }
+        // callBack, errorCallBack, limit = null, road= null, distance= null, lat= null, long= null, price= null, fuel= null
+        fetchDataService.getListOfGasStation(console.log, (()=>{}),  limitRequest, roadRequest, distanceRequest, null, null, priceRequest, fuelRequest)
+    }
 
+    const clear = () => {
+        setLimit(1000)
+        setRoad("")
+        setDistance(0)
+        setPrice(0)
+        setFuel("")
     }
 
     useEffect(() => {
@@ -42,22 +61,23 @@ export default function MapParameters(props){
     if(!isLoaded){return <div>Loading...</div>}
     return (
         <div id="parameters" style={{height: '100%'}}>
-            <form className="form" onSubmit={search()}>
+            <h2 id="title-filter">Filters</h2>
+            <form className="form">
                 <div className="form-field">
                     <label>Limit : </label>
-                    <input className="form-input" type="number" value={limit} onChange={(e) => setLimit(e.target.value)}/>
+                    <input min="0" className="form-input" type="number" value={limit} onChange={(e) => setLimit(e.target.value)}/>
                 </div>
                 <div className="form-field">
                     <label>Road : </label>
                     <input className="form-input" type="text" value={road} onChange={(e) => setRoad(e.target.value)}/>
                 </div>
                 <div className="form-field">
-                    <label>Distance : </label>
-                    <input className="form-input" type="number" value={distance} onChange={(e) => setDistance(e.target.value)}/>
+                    <label>Distance (m) : </label>
+                    <input min="0" className="form-input" type="number" value={distance} onChange={(e) => setDistance(e.target.value)}/>
                 </div>
                 <div className="form-field">
-                    <label>Price : </label>
-                    <input className="form-input" type="number" value={price} onChange={(e) => setPrice(e.target.value)}/>
+                    <label>Price (€) : </label>
+                    <input min="0" className="form-input" type="number" value={price} onChange={(e) => setPrice(e.target.value)}/>
                 </div>
                 <div className="form-field">
                     <label>Fuel : </label>
@@ -71,7 +91,8 @@ export default function MapParameters(props){
                         <option value="GPLc">GPLc</option>
                     </select>
                 </div>
-                <input className="form-submit" type="submit" value="Filter" />
+                <button className="form-submit" onClick={search}>Filter</button>
+                <button className="form-clear" onClick={clear}>Clear</button>
             </form>
         </div>
     )
