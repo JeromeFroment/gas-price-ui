@@ -16,8 +16,7 @@ class DepStatisticsService {
 
     departLastDataLoader(depCode) {
         for(const element of this.allDepStats) {
-            if (element.departmentCode === depCode) {
-                console.log(element);
+            if (element.code === depCode) {
                 return element;
             }
         }
