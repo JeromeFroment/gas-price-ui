@@ -5,7 +5,7 @@ import {
   NavMenu
 } from './NavbarElements';
   
-const Navbar = () => {
+const Navbar = (props) => {
   return (
     <>
       <Nav>
@@ -14,9 +14,12 @@ const Navbar = () => {
             Map
           </NavLink>
           <NavLink to='/stateMap'>
-            Statistics
+            Statistiques
           </NavLink>
         </NavMenu>
+        <button onClick={props.switchTheme}>
+          Switch to {props.theme === 'dark' ? 'light' : 'dark'} theme 
+        </button>
       </Nav>
     </>
   );

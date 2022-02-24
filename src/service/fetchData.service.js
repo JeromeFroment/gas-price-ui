@@ -11,7 +11,6 @@ class FetchDataService {
         if(price != null) { url.searchParams.append('price', price); }
         if(fuel != null) { url.searchParams.append('fuel', fuel); }
 
-        console.log(url)
         fetch(url)
             .then((response) => response.json())
             .then((jsonResponse) => {
