@@ -5,7 +5,7 @@ import {
    useLocation,
    useNavigate
  } from "react-router-dom";
-import { Back } from "../back/Back";
+import { Back } from "../barplot/Back";
 import { DisplayName } from "../displayName/DisplayName";
 import { Row } from "react-bootstrap";
 
@@ -21,8 +21,6 @@ function StateMap({localisation}){
 
    const [textNameTooltip, setTextNameTooltip] = useState("");   
    const [textDataTooltip, setTextDataTooltip] = useState("");
-
-
 
    let styleTooltip = {
         container: {
@@ -52,6 +50,7 @@ function StateMap({localisation}){
       svg.selectAll("path")
          .data(data.features)
          .join("path")
+         .attr("class", "d3map")
          .attr("class","region")
          .attr("d", feature => pathGenerator(feature))
          .on("click", function(d) {

@@ -1,5 +1,23 @@
 .App {
-  text-align: center;
+  color: var(--text-primary);
+  background-color: var(--background);
+  font-size: large;
+  font-weight: bold;
+  height: calc(100vh);
+  transition: all .5s;
+}
+
+button {
+  color: var(--text-primary);
+  background-color: var(--background);
+  border: 2px var(--text-primary) solid;
+  float: right;
+  transition: all .5s;
+}
+
+.header {
+  position: fixed;
+  top: 0;
 }
 
 .App-logo {
@@ -11,6 +29,32 @@
   .App-logo {
     animation: App-logo-spin infinite 40s linear;
   }
+}
+
+svg {
+  display: block;
+  width: 33em;
+  height: 30em;
+  fill: var(--text-primary);
+}
+svg .region:hover {
+  stroke: var(--accent);
+  stroke-width: 1px;
+  cursor: pointer;
+}
+
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  color: black;
+  width: 275px;
+  height: 37px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: grey;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
 }
 
 .App-header {
