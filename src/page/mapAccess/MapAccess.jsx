@@ -1,6 +1,6 @@
 import Map from "../../components/map/Map"
 import React from "react";
-import "./mapAccess.css";
+import "./MapAccess.css";
 import { MarkerModel } from "../../components/model/markerModel";
 import { colors } from "../../components/model/colorsGasStation";
 
