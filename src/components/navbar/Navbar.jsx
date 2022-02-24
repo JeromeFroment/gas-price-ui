@@ -10,11 +10,11 @@ const Navbar = (props) => {
     <>
       <Nav>
         <NavMenu>
-          <NavLink to='/'>
+          <NavLink to='/map'>
             Map
           </NavLink>
           <NavLink to='/stateMap'>
-            Statistics
+            Statistiques
           </NavLink>
         </NavMenu>
         <button onClick={props.switchTheme}>

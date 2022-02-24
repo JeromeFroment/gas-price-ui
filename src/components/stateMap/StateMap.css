@@ -1,0 +1,7 @@
+.regionMap {
+    margin: 3em;
+}
+
+th, td {
+    color: var(--text-primary) !important;
+}

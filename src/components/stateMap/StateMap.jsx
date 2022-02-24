@@ -5,37 +5,50 @@ import {
    useLocation,
    useNavigate
  } from "react-router-dom";
-import { Back } from "../barplot/Back";
+import { Back } from "../back/Back";
 import { DisplayName } from "../displayName/DisplayName";
-import { Row } from "react-bootstrap";
+import 'bootstrap/dist/css/bootstrap.css';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import Table from 'react-bootstrap/Table';
+import "./StateMap.css";
+import { depStatisticsService } from "../../service/depStatistics.service";
+import { regionStatisticsService } from "../../service/regionStatistics.service";
+import Location from "../location/Location";
 
-function StateMap({localisation}){
+function StateMap(){
    
    const svgRef = useRef();
    const wrapperRef = useRef();
    let navigate = useNavigate();
-
-   const [opacity, setOpacity] = useState(0);
-   const [top, setTop] = useState(-500);
-   const [left, setLeft] = useState(-500);
-
-   const [textNameTooltip, setTextNameTooltip] = useState("");   
-   const [textDataTooltip, setTextDataTooltip] = useState("");
-
-   let styleTooltip = {
-        container: {
-            opacity: opacity,
-            top: top,
-            left: left
-        }
-   }
-   
-
    let location = useLocation();   
    const regionFolder = require.context('../../d3js/RegionsMap',true); 
-   let data = location.pathname === '/stateMap' ? france : regionFolder(`./${location.state.regionName}.json`); 
+   let data = location.pathname === '/stateMap' ? france : regionFolder(`./${location.state.regionName}.json`);
+
+   const [textNameTooltip, setTextNameTooltip] = useState("");   
+   const [gasPrices, setGasPrices] = useState([]);
+   const [setError] = useState(null);
+   const [isLoaded, setIsLoaded] = useState(true);
+   const [localisation, setLocalisation] = useState([0,0]);
+    
+    const callBack = (jsonResponse) => {
+        setIsLoaded(true);
+    }
+
+    const errorCallBack = (error) => {
+        setIsLoaded(true);
+        setError(error);
+    }
+
+    const changeLocation = (coordinates) => {
+      setLocalisation(coordinates);
+    }
+   
 
    useEffect(() => {
+      depStatisticsService.getAllDepartmentStats(callBack, errorCallBack);
+      regionStatisticsService.getAllRegionStats(callBack, errorCallBack);
+
       const svg = select(svgRef.current);
 
       if(location.pathname === '/stateMap'){
@@ -50,23 +63,21 @@ function StateMap({localisation}){
       svg.selectAll("path")
          .data(data.features)
          .join("path")
-         .attr("class", "d3map")
-         .attr("class","region")
+         .attr("class", "region")
          .attr("d", feature => pathGenerator(feature))
          .on("click", function(d) {
             if(location.pathname === '/stateMap'){
-               setOpacity(0);
                setTextNameTooltip("");
-               setTextDataTooltip("");
                svg.selectAll("g").remove();
-               navigate('/regionsMap', {
+               navigate('/regionMap', {
                   state: {regionName : d.target.__data__.properties.nom}
                });
             }
-            else if(location.pathname === '/regionsMap'){
-               navigate('/departements', {
+            else if(location.pathname === '/regionMap'){
+               
+             /*  navigate('/departement', {
                   state: {libelle : d.target.__data__.properties.nom}
-               });
+               }); */
             }
             
 
@@ -75,18 +86,17 @@ function StateMap({localisation}){
          .on("mouseover", function(d) {
             if( location.pathname === '/stateMap'){
                setTextNameTooltip(`Région : ${d.target.__data__.properties.nom}`);
-            }
-            setOpacity(0.9);
-            var x = d.clientX;
-            var y = d.clientY;
-            setLeft(x+20);
-            setTop(y+20);
-            
+               const regionStats = regionStatisticsService.regionLastDataLoader(d.target.__data__.properties.code);
+               setGasPrices(regionStats.prices);
+            } else if ( location.pathname === '/regionMap') {
+               setTextNameTooltip(`Département : ${d.target.__data__.properties.nom} - ${d.target.__data__.properties.code}`);
+               const depStats = depStatisticsService.departLastDataLoader(d.target.__data__.properties.code);
+               setGasPrices(depStats.prices);
+            }            
         })
         .on("mouseout", function(d) {
-            setOpacity(0);
-            setTextNameTooltip("");  
-            setTextDataTooltip("");
+            setTextNameTooltip(""); 
+            setGasPrices([]);
         });
 
         if(localisation !== undefined && localisation!== null){
@@ -99,24 +109,52 @@ function StateMap({localisation}){
                .append("circle") 
                .attr("r", 5)
         }
-   } , [textDataTooltip, navigate,data,location,localisation]);
+   } , [navigate,data,location,localisation]);
 
 
-   return (
-      <div>
-         <DisplayName />
-         <div ref={wrapperRef} style={{marginBottom: "2rem"}}>
-            <svg ref={svgRef}>
-               <g></g>
-            </svg>
-            <Row style={styleTooltip.container}>
-               <h3>{textNameTooltip}</h3>
+   if (isLoaded) {
+      return (
+         <div className="regionMap">
+            <Row>
+               <Col>
+                  <DisplayName />
+                  <div ref={wrapperRef} style={{marginBottom: "2rem"}}>
+                     <svg ref={svgRef}>
+                        <g></g>
+                     </svg>
+                  </div>
+               </Col>
+               <Col>
+                  <Row>
+                     <h3 className ="text-center">{textNameTooltip}</h3>
+                     <Table striped bordered hover>
+                        <thead>
+                           <tr>
+                              <th>Carburant</th>
+                              <th>Prix moyen</th>
+                           </tr>
+                        </thead>                     
+                        <tbody>
+                           {gasPrices.map(price => (
+                              <tr key={price.name}>
+                                 <td>{price.name}</td> 
+                                 <td>{Number((price.value).toFixed(3))} euros</td>
+                              </tr>
+                           ))}
+                        </tbody>
+                     </Table>
+                  </Row>
+               </Col>
+            </Row>
+            <Row className="w-50">
+               <Col><Location onChange={changeLocation} />  </Col>
+               <Col>{location.pathname ==='/regionMap' ? <Back />  : <></>}</Col>
             </Row>
          </div>
-         {location.pathname ==='/regionsMap' ? <Back />  : <></>}
-      </div>
-   )
-
+      )
+   } else {
+      return null;
+   }
 }
 
 export default StateMap;
