@@ -5,6 +5,7 @@ import {fetchDataService} from "../../service/fetchData.service";
 
 import './MapParameters.css';
 import { useEffect } from "react";
+import {FilterModel} from "../model/filterModel";
 
 export default function MapParameters(props){
     const [error, setError] = useState(null);
@@ -18,11 +19,7 @@ export default function MapParameters(props){
     const navigate = useNavigate();
 
     const callBack = (jsonResponse) => {
-        let markers = [];
-
-        jsonResponse.forEach(element => {
-
-        })
+        jsonResponse.forEach(element => {})
         setIsLoaded(true);
     }
 
@@ -32,26 +29,16 @@ export default function MapParameters(props){
     }
 
     const search = () => {
-        let limitRequest = null;
-        let roadRequest = null;
-        let distanceRequest = null;
-        let priceRequest = null;
-        let fuelRequest = null;
-        if(limit > 0) { limitRequest = limit }
-        if(road != "") { roadRequest = road }
-        if(distance > 0) { distanceRequest = distance }
-        if(price > 0) { priceRequest = price }
-        if(fuel != "") { fuelRequest = fuel }
+        let filter = new FilterModel(limit, road, distance, price, fuel);
+        console.log(filter)
+        filter.checkFilters()
+        console.log(filter)
         // callBack, errorCallBack, limit = null, road= null, distance= null, lat= null, long= null, price= null, fuel= null
-        fetchDataService.getListOfGasStation(console.log, (()=>{}),  limitRequest, roadRequest, distanceRequest, null, null, priceRequest, fuelRequest)
+        fetchDataService.getListOfGasStation(console.log, (()=>{}), filter.limit, filter.road, filter.distance, null, null, filter.price, filter.fuel)
     }
 
     const clear = () => {
-        setLimit(1000)
-        setRoad("")
-        setDistance(0)
-        setPrice(0)
-        setFuel("")
+
     }
 
     useEffect(() => {
@@ -62,7 +49,7 @@ export default function MapParameters(props){
     return (
         <div id="parameters" style={{height: '100%'}}>
             <h2 id="title-filter">Filters</h2>
-            <form className="form">
+            <form className="form" onSubmit={search}>
                 <div className="form-field">
                     <label>Limit : </label>
                     <input min="0" className="form-input" type="number" value={limit} onChange={(e) => setLimit(e.target.value)}/>
@@ -91,7 +78,7 @@ export default function MapParameters(props){
                         <option value="GPLc">GPLc</option>
                     </select>
                 </div>
-                <button className="form-submit" onClick={search}>Filter</button>
+                <input className="form-submit" type="submit" value="Filter" />
                 <button className="form-clear" onClick={clear}>Clear</button>
             </form>
         </div>

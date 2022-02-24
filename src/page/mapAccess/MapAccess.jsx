@@ -4,8 +4,10 @@ import "./MapAccess.css";
 import MapParameters from "../../components/mapParameters/MapParameters";
 import { MarkerModel } from "../../components/model/markerModel";
 import { colors } from "../../components/model/colorsGasStation";
+import {FilterModel} from "../../components/model/filterModel";
 
-const FiltersContext = React.createContext('filters');
+const FiltersContext = React.createContext();
+export default FiltersContext;
 
 export function MapAccess () {
 
