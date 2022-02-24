@@ -35,7 +35,7 @@ function MapCenter(props) {
                         })());
                         markers.push(next.render())
                     }catch(e){
-
+                        console.log(e);
                     }
                 })
                 setResults(markers);
@@ -55,9 +55,12 @@ function MapCenter(props) {
     }
 
     const errorCallBack = (error) => {
+        console.log(error);
         setIsLoaded(true);
         setError(error);
     }
+    
+    const [fetched, setFetched] = React.useState(false);
 
     useEffect(() => {
         fetchDataService.getListOfGasStation(callBack, errorCallBack,  null, null, null, null, null, null, null)
@@ -121,13 +124,3 @@ export default function Map(props){
         </>
     )
 }
-
-/* <Button onClick={() => {
-                // JE SAIS PAS ENCORE FAIRE DE TESTS AVEC REACT ALORS LAISSEZ MOI ESSAYER
-                const listOfGasStationNoArg = getListOfGasStation();
-                const listOfGasStationLim = getListOfGasStation(5);
-                const listOfGasStationRoad = getListOfGasStation(5, "RD 93 GRANDE RUE");
-                const listOfGasStationDistance = getListOfGasStation(5, "RD 93 GRANDE RUE", 3);
-                const listOfGasStationPrice = getListOfGasStation(5, null, null, 1.5);
-                const listOfGasStationFuel = getListOfGasStation(5, null, null, null, "SP98");
-} } */
