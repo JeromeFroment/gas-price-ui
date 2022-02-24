@@ -14,7 +14,7 @@ import { colors } from "../model/colorsGasStation";
 
 const LIMIT = 1000;
 
-function MapCenter() {
+function MapCenter(props) {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [gasStation, setResults] = useState([]);
@@ -24,21 +24,31 @@ function MapCenter() {
     const callBack = (jsonResponse) => {
         let markers = [];
         if(jsonResponse.length < LIMIT) {
-            jsonResponse.forEach(element => {
-                let next = new MarkerModel(element.position.coordinates[1] , element.position.coordinates[0] , element.address.city);
-                markers.push(next.render())
-            })
-            setResults(markers);
-            setIsLoaded(true);
-        }else{
+                jsonResponse.forEach(element => {
+                    try{
+                        let next = new MarkerModel(element.position.coordinates[1] , element.position.coordinates[0] , element.address.city + ", " + element.address.street + " | " + (()=>{
+                            let prices = "";
+                            for(let i = 0; i < element.prices.length; i++){
+                                prices += element.prices[i].name + ": " + element.prices[i].value + " |";
+                            }
+                            return prices;
+                        })());
+                        markers.push(next.render())
+                    }catch(e){
+
+                    }
+                })
+                setResults(markers);
+                setIsLoaded(true);
+                props.childIsLoaad(true);
+        }else if (jsonResponse.length != undefined){
             if(lastCenter.lat && lastCenter.lng){
                 fetchDataService.getListOfGasStation((jsonResponse)=>{
-                    console.log(jsonResponse.length)
-                    console.log(lastCenter.lat +" " + lastCenter.lng)
                     let next = new MarkerModel(lastCenter.lat, lastCenter.lng, "Zoom to see the " + jsonResponse.length + " gas stations", colors.ZOOM, [50,50]);
                     markers.push(next.render())
                     setResults(markers);
                     setIsLoaded(true);
+                    props.childIsLoaad(true);
                 }, errorCallBack,  null, null, distance, lastCenter.lat, lastCenter.lng, null, null)
             }
         }
@@ -85,11 +95,12 @@ export default function Map(props){
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [gasStation, setResults] = useState([]);
+    const [childIsLoaad, setChildIsLoaded] = useState(false);
 
-    const center= React.createRef()
+    const center= <MapCenter childIsLoaad={setChildIsLoaded}/>
 
     const navigate = useNavigate();
-
+// style={{visibility: center.isLoaded?'visible':'hidden'}}
     return (
         <>  
             <div id="map" style={{height: '100%'}}>
@@ -98,8 +109,8 @@ export default function Map(props){
                     return <div>Erreur lors du chargement des données : {error.toString()} </div>
                 }
             })()}
-                <MapContainer center={[43.27, 5.40]} zoom={9}>
-                    <MapCenter/>
+                <MapContainer preferCanvas={true} center={[43.27, 5.40]} zoom={9}  >
+                    {center}
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -110,3 +121,13 @@ export default function Map(props){
         </>
     )
 }
+
+/* <Button onClick={() => {
+                // JE SAIS PAS ENCORE FAIRE DE TESTS AVEC REACT ALORS LAISSEZ MOI ESSAYER
+                const listOfGasStationNoArg = getListOfGasStation();
+                const listOfGasStationLim = getListOfGasStation(5);
+                const listOfGasStationRoad = getListOfGasStation(5, "RD 93 GRANDE RUE");
+                const listOfGasStationDistance = getListOfGasStation(5, "RD 93 GRANDE RUE", 3);
+                const listOfGasStationPrice = getListOfGasStation(5, null, null, 1.5);
+                const listOfGasStationFuel = getListOfGasStation(5, null, null, null, "SP98");
+} } */
