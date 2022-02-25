@@ -5,18 +5,21 @@ import {
   NavMenu
 } from './NavbarElements';
   
-const Navbar = () => {
+const Navbar = (props) => {
   return (
     <>
       <Nav>
         <NavMenu>
-          <NavLink to='/'>
+          <NavLink to='/map'>
             Map
           </NavLink>
-          <NavLink to='/statistics'>
-            Statistics
+          <NavLink to='/stateMap'>
+            Statistiques
           </NavLink>
         </NavMenu>
+        <button onClick={props.switchTheme}>
+          Switch to {props.theme === 'dark' ? 'light' : 'dark'} theme 
+        </button>
       </Nav>
     </>
   );

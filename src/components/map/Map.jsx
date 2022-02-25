@@ -39,7 +39,7 @@ function MapCenter(props) {
                         })());
                         markers.push(next.render())
                     }catch(e){
-
+                        console.log(e);
                     }
                 })
                 setResults(markers);
@@ -59,9 +59,12 @@ function MapCenter(props) {
     }
 
     const errorCallBack = (error) => {
+        console.log(error);
         setIsLoaded(true);
         setError(error);
     }
+    
+    const [fetched, setFetched] = React.useState(false);
 
     useEffect(() => {
         fetchDataService.getListOfGasStation(callBack, errorCallBack,  null, null, null, null, null, null, null)
