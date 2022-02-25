@@ -1,10 +1,13 @@
 import React from "react";
 import './App.css';
 import RouterFunction from "./components/routing/Router";
+import {FilterProvider} from "./contexts/FilterContext";
 
 function App() {
   return (
-    <RouterFunction></RouterFunction>
+      <FilterProvider>
+        <RouterFunction></RouterFunction>
+      </FilterProvider>
   );
 }
 

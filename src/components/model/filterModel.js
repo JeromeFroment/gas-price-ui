@@ -7,7 +7,7 @@ export class FilterModel{
     price;
     fuel;
 
-    constructor(limit = 1000, road = null, distance = null, price = null, fuel = null){
+    constructor(limit = null, road = null, distance = null, price = null, fuel = null){
         this.setLimit(limit);
         this.setRoad(road);
         this.setDistance(distance);
@@ -15,8 +15,8 @@ export class FilterModel{
         this.setFuel(fuel);
     }
 
-    setLimit(limit = 1000) {
-        if(limit <= 0) { limit = 1000; }
+    setLimit(limit = null) {
+        if(limit <= 0) { limit = null; }
         this.limit = limit;
     }
 
@@ -46,13 +46,5 @@ export class FilterModel{
         this.setDistance(this.distance);
         this.setPrice(this.price);
         this.setFuel(this.fuel);
-    }
-
-    clearFilters() {
-        this.setLimit(1000);
-        this.setRoad("");
-        this.setDistance(0);
-        this.setPrice(0);
-        this.setFuel("");
     }
 }
