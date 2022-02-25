@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import { useState } from 'react'
 import { useNavigate } from "react-router";
 import { MarkerModel } from "../model/markerModel";
@@ -11,6 +11,7 @@ import MarkerClusterGroup from "react-leaflet-markercluster"
 import './Map.css';
 import { useEffect } from "react";
 import { colors } from "../model/colorsGasStation";
+import {FilterContext} from "../../contexts/FilterContext";
 
 const LIMIT = 1000;
 
@@ -20,6 +21,9 @@ function MapCenter(props) {
     const [gasStation, setResults] = useState([]);
     const [distance, setDistance] = useState(null);
     const [lastCenter, setCenter] = useState([]);
+
+    const filterContext = useContext(FilterContext);
+    const filter = filterContext.filter;
     
     const callBack = (jsonResponse) => {
         let markers = [];
