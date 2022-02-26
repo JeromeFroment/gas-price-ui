@@ -63,12 +63,12 @@ function MapCenter(props) {
         setIsLoaded(true);
         setError(error);
     }
-    
-    const [fetched, setFetched] = React.useState(false);
 
     useEffect(() => {
-        fetchDataService.getListOfGasStation(callBack, errorCallBack,  null, null, null, null, null, null, null)
-    }, [])
+        fetchDataService.getListOfGasStation(callBack, errorCallBack,  LIMIT, filter.road, distance, lastCenter.lat, lastCenter.lng, filter.price, filter.fuel)
+    }, [filter])
+    
+    const [fetched, setFetched] = React.useState(false);
 
     const map = useMapEvents({
       dragend: (e) => {
@@ -76,14 +76,14 @@ function MapCenter(props) {
         const center = e.target.getCenter();
         setDistance(bounds._southWest.distanceTo(bounds._northEast))
         setCenter(center)
-        fetchDataService.getListOfGasStation(callBack, errorCallBack,  LIMIT, null, bounds._southWest.distanceTo(bounds._northEast), center.lat, center.lng, null, null)
+        fetchDataService.getListOfGasStation(callBack, errorCallBack,  LIMIT, filter.road, bounds._southWest.distanceTo(bounds._northEast), center.lat, center.lng, filter.price, filter.fuel)
       }, 
       zoomend: (e) => {
         const bounds = e.target.getBounds();
         const center = e.target.getCenter();
         setDistance(bounds._southWest.distanceTo(bounds._northEast))
         setCenter(center)
-        fetchDataService.getListOfGasStation(callBack, errorCallBack, LIMIT, null, bounds._southWest.distanceTo(bounds._northEast), center.lat, center.lng, null, null)
+        fetchDataService.getListOfGasStation(callBack, errorCallBack, LIMIT, filter.road, bounds._southWest.distanceTo(bounds._northEast), center.lat, center.lng, filter.price, filter.fuel)
       }
     });
 

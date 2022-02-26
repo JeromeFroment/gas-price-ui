@@ -7,9 +7,7 @@ import {FilterContext} from "../../contexts/FilterContext";
 import {Form, Button, Row, Col} from 'react-bootstrap';
 
 export default function MapParameters(props){
-    const [limit, setLimit] = useState(0);
     const [road, setRoad] = useState("");
-    const [distance, setDistance] = useState(0);
     const [price, setPrice] = useState(0);
     const [fuel, setFuel] = useState("");
 
@@ -17,15 +15,13 @@ export default function MapParameters(props){
     const filterContext = useContext(FilterContext);
 
     const search = () => {
-        let filter = new FilterModel(limit, road, distance, price, fuel);
+        let filter = new FilterModel(road, price, fuel);
         filter.checkFilters()
         filterContext.updateFilter(filter);
     }
 
     const clear = () => {
-        setLimit(0);
         setRoad("");
-        setDistance(0);
         setPrice(0);
         setFuel("");
         let filter = new FilterModel();
@@ -36,21 +32,15 @@ export default function MapParameters(props){
         <div id="parameters" className="w-100">
             <h2 id="title-filter">Filtres</h2>
             <Form className="form">
-                <Form.Group className="mb-3">
-                    <Form.Label>Limite : </Form.Label>
-                    <Form.Control min="0" type="number" value={limit} onChange={(e) => setLimit(e.target.value)}/>
-                </Form.Group>
                 <Form.Group>
                     <Form.Label>Route : </Form.Label>
                     <Form.Control type="text" value={road} onChange={(e) => setRoad(e.target.value)}/>
                 </Form.Group>
                 <Form.Group>
-                    <Form.Label>Distance (m) : </Form.Label>
-                    <Form.Control min="0" className="form-input" type="number" value={distance} onChange={(e) => setDistance(e.target.value)}/>
-                </Form.Group>
-                <Form.Group>
                     <Form.Label>Prix (€) : </Form.Label>
-                    <Form.Control min="0" className="form-input" type="number" value={price} onChange={(e) => setPrice(e.target.value)}/>
+                    {(fuel != "")?
+                    <Form.Control min="0" className="form-input" type="number" value={price} onChange={(e) => setPrice(e.target.value)}/>:
+                    <Form.Control min="0" className="form-input" type="text"  disabled="disabled" value="Veuillez sélectionner un type de carburant"/>}
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Type d'essence : </Form.Label>
