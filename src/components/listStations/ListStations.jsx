@@ -2,7 +2,9 @@ import React, {useRef, useEffect, useState} from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import Container from 'react-bootstrap/Container';
 import {fetchDataService} from "../../service/fetchData.service";
+import MapParameters from "../../components/mapParameters/MapParameters";
 
 function ListStations(){
 
@@ -25,11 +27,21 @@ function ListStations(){
 
     return (
         <div className="listStations">
-            {listStations.map(station => (
+            <Container>
                 <Row>
-                    <li id={listStations.findIndex(st => st === station)}> {station.address.street} - {station.address.postalCode} - {station.address.street} </li>
+                    <Col>
+                        {listStations.map(station => (
+                            <Row>
+                                <li id={listStations.findIndex(st => st === station)}> {station.address.street} - {station.address.postalCode} - {station.address.street} </li>
+                            </Row>
+                        ))}
+                    </Col>
+                    <Col>
+                        <MapParameters id="parameters-container"/>
+                    </Col>
                 </Row>
-            ))}
+            </Container>
+            
         </div>
      )
 }

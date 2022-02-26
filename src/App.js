@@ -1,7 +1,8 @@
 import React from "react";
 import './App.css';
 import RouterFunction from "./components/routing/Router";
-import useLocalStorage from 'use-local-storage'
+import {FilterProvider} from "./contexts/FilterContext";
+import useLocalStorage from 'use-local-storage';
 
 function App() {
   const defaultDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -15,7 +16,9 @@ function App() {
   return (
     <>
       <div className="App" data-theme={theme}>
-        <RouterFunction theme={theme} switchTheme={switchTheme}></RouterFunction>
+          <FilterProvider>
+            <RouterFunction theme={theme} switchTheme={switchTheme}></RouterFunction>
+          </FilterProvider>
       </div>
     </>
   );

@@ -14,15 +14,15 @@ code {
 
 :root {
   --background: white;
-  --background-secondary: rgb(159, 81, 211);
+  --background-secondary: rgb(92, 129, 252);
   --text-primary: black;
-  --text-secondary: rgb(11, 19, 41);
-  --accent: purple;
+  --text-secondary: rgb(255, 255, 255);
+  --accent: white;
 }
 [data-theme='dark'] {
-  --background: black;
+  --background: rgb(61, 61, 61);
   --background-secondary: rgb(37, 37, 37);
   --text-primary: white;
-  --text-secondary: rgb(182, 0, 0);
+  --text-secondary: rgb(230, 5, 5);
   --accent: darkred;
 }
