@@ -5,6 +5,8 @@ import {
   NavMenu
 } from './NavbarElements';
 import Button from "react-bootstrap/Button";
+import Col from 'react-bootstrap/Col';
+
   
 const Navbar = (props) => {
   return (
@@ -17,9 +19,12 @@ const Navbar = (props) => {
           <NavLink to='/stateMap'>
             Statistiques
           </NavLink>
+          <NavLink to='/listStations'>
+            Liste stations
+          </NavLink>
         </NavMenu>
-        <Button className="h-75 mt-auto mb-auto" variant="warning" onClick={props.switchTheme}>
-          Switch to {props.theme === 'dark' ? 'light' : 'dark'} theme 
+        <Button className="h-75 mt-auto mb-auto" variant="light" onClick={props.switchTheme}>
+          Mode {props.theme === 'dark' ? 'Clair' : 'Sombre'} 
         </Button>
       </Nav>
     </>

@@ -2,6 +2,7 @@ import React from "react";
 import { MapAccess } from "../../page/mapAccess/MapAccess";
 import NotFound from "../notFound/NotFound";
 import { StatisticsAccess } from "../../page/statisticsAccess/StatisticsAccess";
+import { ListAccess } from "../../page/listAccess/ListAccess";
 import Navbar from "../navbar/Navbar";
 import {
   BrowserRouter,
@@ -21,6 +22,7 @@ export default function RouterFunction(props) {
         <Route path="/map" element={<MapAccess />} />
         <Route path="/stateMap" element={<StatisticsAccess />} />
         <Route path="/regionMap" element={<StatisticsAccess />} />
+        <Route path="/listStations" element={<ListAccess />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

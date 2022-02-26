@@ -45,7 +45,7 @@ function MapCenter(props) {
                 setResults(markers);
                 setIsLoaded(true);
                 props.childIsLoaad(true);
-        }else if (jsonResponse.length != undefined){
+        } else if (jsonResponse.length != undefined){
             if(lastCenter.lat && lastCenter.lng){
                 fetchDataService.getListOfGasStation((jsonResponse)=>{
                     let next = new MarkerModel(lastCenter.lat, lastCenter.lng, "Zoom to see the " + jsonResponse.length + " gas stations", colors.ZOOM, [50,50]);
@@ -107,15 +107,15 @@ export default function Map(props){
     const center= <MapCenter childIsLoaad={setChildIsLoaded}/>
 
     const navigate = useNavigate();
-// style={{visibility: center.isLoaded?'visible':'hidden'}}
+
     return (
         <>  
-            <div id="map" style={{height: '100%'}}>
-            {(()=>{
-                if(error){
-                    return <div>Erreur lors du chargement des données : {error.toString()} </div>
-                }
-            })()}
+            <div  style={{height: '100%'}}>
+                {(()=>{
+                    if(error){
+                        return <div>Erreur lors du chargement des données : {error.toString()} </div>
+                    }
+                })()}
                 <MapContainer preferCanvas={true} center={[43.27, 5.40]} zoom={9}  >
                     {center}
                     <TileLayer
