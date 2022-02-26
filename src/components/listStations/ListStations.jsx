@@ -15,12 +15,18 @@ function ListStations(){
     const [listStations, setlistStations] = useState([]);
     const [stateVisibility, setStateVisibility] = useState(false);
     const [elementId, setElementId] = useState(0);
+    
     const filterContext = useContext(FilterContext);
     const filter = filterContext.filter;
     
     
     const callBack = (jsonResponse) => {
-        setlistStations(jsonResponse.slice(0, 10));
+        console.log(jsonResponse.length);
+        setlistStations(jsonResponse.slice(0,10).sort(function(a, b){
+            if(a.address.street < b.address.street) { return -1; }
+            if(a.address.street > b.address.street) { return 1; }
+            return 0;
+        }));
     }
 
     const errorCallBack = (error) => {
@@ -29,8 +35,8 @@ function ListStations(){
 
     useEffect(() => {
         setlistStations([]);
-        fetchDataService.getListOfGasStation(callBack, errorCallBack,  null, null, null, null, null, null, null)
-    }, [])
+        fetchDataService.getListOfGasStation(callBack, errorCallBack,  null, filter.road, null, null, null, filter.price, filter.fuel)
+    }, [filter])
 
     const setVisibility = (id) => {
         setElementId(id);
