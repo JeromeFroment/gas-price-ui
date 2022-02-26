@@ -7,7 +7,6 @@ import {FilterContext} from "../../contexts/FilterContext";
 
 export default function MapParameters(props){
     const [road, setRoad] = useState("");
-    const [distance, setDistance] = useState(0);
     const [price, setPrice] = useState(0);
     const [fuel, setFuel] = useState("");
 
@@ -15,14 +14,13 @@ export default function MapParameters(props){
     const filterContext = useContext(FilterContext);
 
     const search = () => {
-        let filter = new FilterModel(road, distance, price, fuel);
+        let filter = new FilterModel(road, price, fuel);
         filter.checkFilters()
         filterContext.updateFilter(filter);
     }
 
     const clear = () => {
         setRoad("");
-        setDistance(0);
         setPrice(0);
         setFuel("");
         let filter = new FilterModel();
@@ -38,12 +36,13 @@ export default function MapParameters(props){
                     <input className="form-input" type="text" value={road} onChange={(e) => setRoad(e.target.value)}/>
                 </div>
                 <div className="form-field">
-                    <label>Distance (m) : </label><br/>
-                    <input min="0" className="form-input" type="number" value={distance} onChange={(e) => setDistance(e.target.value)}/>
-                </div>
-                <div className="form-field">
                     <label>Price (€) : </label><br/>
-                    <input min="0" className="form-input" type="number" value={price} onChange={(e) => setPrice(e.target.value)}/>
+                    {(fuel != "") ?
+                        <input min="0" className="form-input" type="number" value={price}
+                               onChange={(e) => setPrice(e.target.value)}/> :
+                        <input min="0" className="form-input" type="text" disabled="disabled"
+                               value="Veuillez sélectionner un type de carburant"/>
+                    }
                 </div>
                 <div className="form-field">
                     <label>Fuel : </label><br/>
