@@ -114,9 +114,9 @@ function StateMap(){
 
    if (isLoaded) {
       return (
-         <div className="regionMap">
+         <div>
             <Row>
-               <Col>
+               <Col >
                   <DisplayName />
                   <div ref={wrapperRef} style={{marginBottom: "2rem"}}>
                      <svg ref={svgRef}>
@@ -124,7 +124,7 @@ function StateMap(){
                      </svg>
                   </div>
                </Col>
-               <Col>
+               <Col xs={12} lg={5}>
                   <Row>
                      <h3 className ="text-center">{textNameTooltip}</h3>
                      <Table striped bordered hover>
@@ -146,9 +146,9 @@ function StateMap(){
                   </Row>
                </Col>
             </Row>
-            <Row className="w-50">
-               <Col><Location onChange={changeLocation} />  </Col>
-               <Col>{location.pathname ==='/regionMap' ? <Back />  : <></>}</Col>
+            <Row>
+               <Col xs lg={2}><Location onChange={changeLocation} />  </Col>
+               <Col xs lg={1}>{location.pathname ==='/regionMap' ? <Back />  : <></>}</Col>
             </Row>
          </div>
       )

@@ -5,6 +5,7 @@ import {
   NavMenu
 } from './NavbarElements';
 import Button from "react-bootstrap/Button";
+import Col from 'react-bootstrap/Col';
 
   
 const Navbar = (props) => {

@@ -34,7 +34,7 @@ export default function MapParameters(props){
 
     return (
         <div id="parameters" className="w-100">
-            <h2 id="title-filter">Filters</h2>
+            <h2 id="title-filter">Filtres</h2>
             <Form className="form">
                 <Form.Group className="mb-3">
                     <Form.Label>Limite : </Form.Label>

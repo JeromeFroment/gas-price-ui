@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -8,11 +8,15 @@ import MapParameters from "../../components/mapParameters/MapParameters";
 import "./ListStations.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
+import {FilterContext} from "../../contexts/FilterContext";
 
 function ListStations(){
 
     const [listStations, setlistStations] = useState([]);
     const [stateVisibility, setStateVisibility] = useState(false);
+    const [elementId, setElementId] = useState(0);
+    const filterContext = useContext(FilterContext);
+    const filter = filterContext.filter;
     
     
     const callBack = (jsonResponse) => {
@@ -28,14 +32,19 @@ function ListStations(){
         fetchDataService.getListOfGasStation(callBack, errorCallBack,  null, null, null, null, null, null, null)
     }, [])
 
+    const setVisibility = (id) => {
+        setElementId(id);
+        setStateVisibility(!stateVisibility)
+    }
+
     return (
         <div className="listStations">
             <Container>
                 <Row>
                     <Col>
                         {listStations.map(station => (
-                            <div className="station" onClick={() => setStateVisibility(!stateVisibility)}>
-                                <Row >
+                            <div className="station" onClick={((e) => setVisibility(station.id))}>
+                                <Row>
                                     <Col className="title" sm={10} id={listStations.findIndex(st => st === station)}> 
                                         {station.address.street} - {station.address.city}
                                     </Col>
@@ -43,7 +52,7 @@ function ListStations(){
                                         <FontAwesomeIcon icon={faAngleDown} className="w-75" />
                                     </Col>
                                 </Row>
-                                <Row className={stateVisibility ? 'visible': 'hidden'} >
+                                <Row id={station.id} className={(stateVisibility === true && elementId === station.id) ? 'visible': 'hidden'} >
                                     {station.prices.map(price => (
                                         <Row className="justify-content-md-center" key={price.name}>
                                             <Col sm={3}>{price.name}</Col> 
