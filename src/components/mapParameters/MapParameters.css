@@ -9,3 +9,7 @@
 .form-submit {
     margin-right: 5px;
 }
+
+.form-input {
+    width: 80%;
+}

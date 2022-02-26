@@ -6,7 +6,6 @@ import {FilterModel} from "../model/filterModel";
 import {FilterContext} from "../../contexts/FilterContext";
 
 export default function MapParameters(props){
-    const [limit, setLimit] = useState(0);
     const [road, setRoad] = useState("");
     const [distance, setDistance] = useState(0);
     const [price, setPrice] = useState(0);
@@ -16,13 +15,12 @@ export default function MapParameters(props){
     const filterContext = useContext(FilterContext);
 
     const search = () => {
-        let filter = new FilterModel(limit, road, distance, price, fuel);
+        let filter = new FilterModel(road, distance, price, fuel);
         filter.checkFilters()
         filterContext.updateFilter(filter);
     }
 
     const clear = () => {
-        setLimit(0);
         setRoad("");
         setDistance(0);
         setPrice(0);
@@ -36,23 +34,19 @@ export default function MapParameters(props){
             <h2 id="title-filter">Filters</h2>
             <form className="form">
                 <div className="form-field">
-                    <label>Limit : </label>
-                    <input min="0" className="form-input" type="number" value={limit} onChange={(e) => setLimit(e.target.value)}/>
-                </div>
-                <div className="form-field">
-                    <label>Road : </label>
+                    <label>Road : </label><br/>
                     <input className="form-input" type="text" value={road} onChange={(e) => setRoad(e.target.value)}/>
                 </div>
                 <div className="form-field">
-                    <label>Distance (m) : </label>
+                    <label>Distance (m) : </label><br/>
                     <input min="0" className="form-input" type="number" value={distance} onChange={(e) => setDistance(e.target.value)}/>
                 </div>
                 <div className="form-field">
-                    <label>Price (€) : </label>
+                    <label>Price (€) : </label><br/>
                     <input min="0" className="form-input" type="number" value={price} onChange={(e) => setPrice(e.target.value)}/>
                 </div>
                 <div className="form-field">
-                    <label>Fuel : </label>
+                    <label>Fuel : </label><br/>
                     <select value={fuel} onChange={(e) => setFuel(e.target.value)}>
                         <option value="">--------</option>
                         <option value="SP98">SP98</option>
