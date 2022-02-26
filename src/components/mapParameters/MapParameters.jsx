@@ -32,8 +32,12 @@ export default function MapParameters(props){
             <h2 id="title-filter">Filters</h2>
             <form className="form">
                 <div className="form-field">
-                    <label>Road : </label><br/>
-                    <input className="form-input" type="text" value={road} onChange={(e) => setRoad(e.target.value)}/>
+                    <label>Type de station : </label><br/>
+                    <select value={road} onChange={(e) => setRoad(e.target.value)}>
+                        <option value="">--------</option>
+                        <option value="A">Station d'autoroute</option>
+                        <option value="R">Station standard</option>
+                    </select>
                 </div>
                 <div className="form-field">
                     <label>Price (€) : </label><br/>
