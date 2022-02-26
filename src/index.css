@@ -17,7 +17,7 @@ code {
   --background-secondary: rgb(159, 81, 211);
   --text-primary: black;
   --text-secondary: rgb(11, 19, 41);
-  --accent: purple;
+  --accent: white;
 }
 [data-theme='dark'] {
   --background: black;

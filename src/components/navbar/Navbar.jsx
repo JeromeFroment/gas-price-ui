@@ -4,6 +4,7 @@ import {
   NavLink,
   NavMenu
 } from './NavbarElements';
+import Button from "react-bootstrap/Button";
   
 const Navbar = (props) => {
   return (
@@ -17,9 +18,9 @@ const Navbar = (props) => {
             Statistiques
           </NavLink>
         </NavMenu>
-        <button onClick={props.switchTheme}>
+        <Button className="h-75 mt-auto mb-auto" variant="warning" onClick={props.switchTheme}>
           Switch to {props.theme === 'dark' ? 'light' : 'dark'} theme 
-        </button>
+        </Button>
       </Nav>
     </>
   );
