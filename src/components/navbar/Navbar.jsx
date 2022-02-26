@@ -16,6 +16,9 @@ const Navbar = (props) => {
           <NavLink to='/stateMap'>
             Statistiques
           </NavLink>
+          <NavLink to='/listStations'>
+            Liste stations
+          </NavLink>
         </NavMenu>
         <button onClick={props.switchTheme}>
           Switch to {props.theme === 'dark' ? 'light' : 'dark'} theme 
