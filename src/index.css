@@ -15,6 +15,7 @@ code {
 :root {
   --background: white;
   --background-secondary: rgb(92, 129, 252);
+  --background-third: #e2e2e275;
   --text-primary: black;
   --text-secondary: rgb(255, 255, 255);
   --accent: white;
@@ -22,7 +23,8 @@ code {
 [data-theme='dark'] {
   --background: rgb(61, 61, 61);
   --background-secondary: rgb(37, 37, 37);
-  --text-primary: white;
+  --background-third: white;
+  --text-primary: rgb(255, 255, 255);
   --text-secondary: rgb(230, 5, 5);
   --accent: darkred;
 }
