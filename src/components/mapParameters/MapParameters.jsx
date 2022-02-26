@@ -33,8 +33,12 @@ export default function MapParameters(props){
             <h2 id="title-filter">Filtres</h2>
             <Form className="form">
                 <Form.Group>
-                    <Form.Label>Route : </Form.Label>
-                    <Form.Control type="text" value={road} onChange={(e) => setRoad(e.target.value)}/>
+                    <Form.Label>Type de station : </Form.Label>
+                    <Form.Select value={road} onChange={(e) => setRoad(e.target.value)}>
+                        <option value="">--------</option>
+                        <option value="A">Station d'autoroute</option>
+                        <option value="R">Station standard</option>
+                    </Form.Select>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Prix (€) : </Form.Label>
