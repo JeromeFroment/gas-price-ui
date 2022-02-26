@@ -1,23 +1,16 @@
 import React from "react";
 
-export class FilterModel{
-    limit;
+export class FilterModel {
     road;
     distance;
     price;
     fuel;
 
-    constructor(limit = null, road = null, distance = null, price = null, fuel = null){
-        this.setLimit(limit);
+    constructor(road = null, distance = null, price = null, fuel = null) {
         this.setRoad(road);
         this.setDistance(distance);
         this.setPrice(price);
         this.setFuel(fuel);
-    }
-
-    setLimit(limit = null) {
-        if(limit <= 0) { limit = null; }
-        this.limit = limit;
     }
 
     setRoad(road = null) {
@@ -41,7 +34,6 @@ export class FilterModel{
     }
 
     checkFilters() {
-        this.setLimit(this.limit);
         this.setRoad(this.road);
         this.setDistance(this.distance);
         this.setPrice(this.price);
