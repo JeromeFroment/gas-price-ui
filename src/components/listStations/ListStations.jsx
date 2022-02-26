@@ -64,7 +64,7 @@ function ListStations(){
                             
                         ))}
                     </Col>
-                    <Col className="filter">
+                    <Col xs={12} lg={5} className="filter">
                         <MapParameters id="parameters-container"/>
                     </Col>
                 </Row>
