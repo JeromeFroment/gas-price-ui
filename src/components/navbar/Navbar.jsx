@@ -14,7 +14,7 @@ const Navbar = (props) => {
       <Nav>
         <NavMenu>
           <NavLink to='/map'>
-            Map
+            Carte
           </NavLink>
           <NavLink to='/stateMap'>
             Statistiques
