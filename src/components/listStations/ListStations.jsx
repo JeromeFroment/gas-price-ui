@@ -21,7 +21,6 @@ function ListStations(){
     
     
     const callBack = (jsonResponse) => {
-        console.log(jsonResponse.length);
         setlistStations(jsonResponse.slice(0,10).sort(function(a, b){
             if(a.address.street < b.address.street) { return -1; }
             if(a.address.street > b.address.street) { return 1; }

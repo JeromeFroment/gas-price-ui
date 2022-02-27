@@ -9,7 +9,6 @@ class RegionStatisticsService {
     })
 
     regionLastDataLoader(regionCode) {
-        console.log(this.allRegionStats)
         for(const element of this.allRegionStats) {
             if (element.code === regionCode) {
                 return element;
@@ -20,7 +19,6 @@ class RegionStatisticsService {
 
     setStats(jsonResponse) {
         this.allRegionStats = jsonResponse;
-        console.log(this.allRegionStats);
     }
 }
 

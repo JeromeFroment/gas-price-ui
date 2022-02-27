@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 
 
 async function loginUser(credentials) {
-    console.log(credentials)
     return fetch('http://localhost:8080/login', {
       method: 'POST',
       headers: {

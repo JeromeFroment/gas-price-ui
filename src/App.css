@@ -107,3 +107,7 @@ div.tooltip {
   text-align: center;
   margin: auto auto;
 }
+
+.header {
+  height: 10em;
+}

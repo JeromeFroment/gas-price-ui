@@ -19,12 +19,6 @@ function App() {
   const { token, setToken } = useToken();
   const [ tokenRefresh, setTokenRefresh ] = useLocalStorage('token');
 
-  if (window.performance) {
-    
-    console.log(token)
-  }
-
-
   if(!token && !tokenRefresh) {
     return <LoginAccess setToken={setToken} />
   }

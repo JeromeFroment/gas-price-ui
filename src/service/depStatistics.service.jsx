@@ -20,7 +20,6 @@ class DepStatisticsService {
 
     setStats(jsonResponse) {
         this.allDepStats = jsonResponse;
-        console.log(this.allDepStats);
     }
 }
 
