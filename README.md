@@ -11,6 +11,7 @@ https://github.com/Anthony-Barna/si5-prog-web-project
 
 ## How to start the project :
 
+### `npm install`
 ### `npm start`
 
 L'application est disponible a l'adresse : [http://localhost:3000](http://localhost:3000).
