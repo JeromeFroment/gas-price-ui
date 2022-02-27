@@ -1,5 +1,6 @@
 import {regionStatisticsService} from "./regionStatistics.service";
 import {depStatisticsService} from "./depStatistics.service";
+import { nationalStatisticsService } from "./nationalStatistics.service";
 
 class FetchWithHeaderService {
     constructor() {}
@@ -18,7 +19,7 @@ class FetchWithHeaderService {
         if (data && verb !== "GET")    {
             request.body = JSON.stringify(data);
         }
-        
+        console.log(url);
         fetch(url, request)
             .then((response) => response.json())
             .then((jsonResponse) => {
@@ -27,8 +28,10 @@ class FetchWithHeaderService {
                 else {
                     if (url.includes("regional"))
                         regionStatisticsService.setStats(jsonResponse);
-                    else if (url.includes("departmental"))
+                    else if (url.includes("departmental")) {
                         depStatisticsService.setStats(jsonResponse);
+                     
+                    }
                 }
             }, (error) => {
                 if (errorCallBack !== null)
