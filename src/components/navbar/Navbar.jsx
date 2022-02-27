@@ -9,6 +9,7 @@ import Col from 'react-bootstrap/Col';
 
   
 const Navbar = (props) => {
+
   return (
     <>
       <Nav>
@@ -22,7 +23,6 @@ const Navbar = (props) => {
           <NavLink to='/listStations'>
             Liste stations
           </NavLink>
-          
         </NavMenu>
         <Button className="h-75 mt-auto mb-auto" variant="light" onClick={props.switchTheme}>
           Mode {props.theme === 'dark' ? 'Clair' : 'Sombre'} 

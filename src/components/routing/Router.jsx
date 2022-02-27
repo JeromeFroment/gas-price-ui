@@ -17,7 +17,7 @@ export default function RouterFunction(props) {
  
   return (
     <BrowserRouter>
-      <Navbar theme={props.theme} switchTheme={props.switchTheme}/>
+      <Navbar theme={props.theme} switchTheme={props.switchTheme} />
       <Routes>
         <Route path="/" element={<Navigate to="/map"/>} />
         <Route path="/login" element={<LoginAccess />} />

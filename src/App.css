@@ -35,7 +35,7 @@ button {
 svg {
   display: block;
   width: 100%;
-  height: 40vh;
+  height: 50vh;
   fill: var(--text-primary);
 }
 svg .region:hover {
