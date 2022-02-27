@@ -7,9 +7,13 @@
 }
 
 .form-submit {
-    margin-right: 5px;
+    margin-right: 10px;
 }
 
 .form-input {
     width: 80%;
+}
+
+.form {
+    margin-bottom: 10px;
 }
