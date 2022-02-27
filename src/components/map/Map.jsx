@@ -32,10 +32,19 @@ function MapCenter(props) {
                     try{
                         let next = new MarkerModel(element.position.coordinates[1] , element.position.coordinates[0] , element.address.city + ", " + element.address.street + " | " + (()=>{
                             let prices = "";
-                            for(let i = 0; i < element.prices.length; i++){
-                                prices += element.prices[i].name + ": " + element.prices[i].value + " |";
+                            if(filter.fuel){
+                                for(let i = 0; i < element.prices.length; i++){
+                                    if(element.prices[i].name === filter.fuel){
+                                        prices += element.prices[i].name + ": " + element.prices[i].value ;
+                                        return prices;
+                                    }
+                                }
+                            }else{
+                                for(let i = 0; i < element.prices.length; i++){
+                                    prices += element.prices[i].name + ": " + element.prices[i].value + " |";
+                                }
+                                return prices;
                             }
-                            return prices;
                         })());
                         markers.push(next.render())
                     }catch(e){
