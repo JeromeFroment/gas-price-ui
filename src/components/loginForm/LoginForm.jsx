@@ -155,7 +155,7 @@ export default function LoginForm({ setToken }){
                         </Row>
                         <Row className="mt-3 justify-content-center">
                             <Col xs="auto" lg="auto" className="">
-                                <Button variant="primary" type="submit">Connexion</Button>
+                                <Button variant="primary" type="submit">Inscription</Button>
                             </Col>
                         </Row>
                     </Form>
