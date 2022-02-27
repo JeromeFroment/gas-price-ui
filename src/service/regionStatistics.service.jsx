@@ -1,16 +1,11 @@
+import {fetchWithHeaderService} from "./fetchWithHeader.service";
 class RegionStatisticsService {
 
     url = "http://localhost:8080/api/regional-statistics";
     allRegionStats = [];
 
-    getAllRegionStats = ((callBack, errorCallBack) => {
-        fetch(this.url)
-            .then((response) => response.json())
-            .then((jsonResponse) => {
-                this.allRegionStats = jsonResponse;
-            }, (error) => {
-                errorCallBack(error);
-            })
+    getAllRegionStats = (() => {
+        this.allRegionStats = fetchWithHeaderService.fetchWithHeaders("GET", this.url, null, null, null);
     })
 
     regionLastDataLoader(regionCode) {
@@ -20,6 +15,10 @@ class RegionStatisticsService {
             }
         }
         return null;
+    }
+
+    setStats(jsonResponse) {
+        this.allRegionStats = jsonResponse;
     }
 }
 

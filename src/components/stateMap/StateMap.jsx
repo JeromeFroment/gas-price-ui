@@ -31,14 +31,6 @@ function StateMap(){
    const [isLoaded, setIsLoaded] = useState(true);
    const [localisation, setLocalisation] = useState([0,0]);
     
-    const callBack = (jsonResponse) => {
-        setIsLoaded(true);
-    }
-
-    const errorCallBack = (error) => {
-        setIsLoaded(true);
-        setError(error);
-    }
 
     const changeLocation = (coordinates) => {
       setLocalisation(coordinates);
@@ -46,8 +38,8 @@ function StateMap(){
    
 
    useEffect(() => {
-      depStatisticsService.getAllDepartmentStats(callBack, errorCallBack);
-      regionStatisticsService.getAllRegionStats(callBack, errorCallBack);
+      depStatisticsService.getAllDepartmentStats();
+      regionStatisticsService.getAllRegionStats();
 
       const svg = select(svgRef.current);
 
@@ -85,13 +77,22 @@ function StateMap(){
          })
          .on("mouseover", function(d) {
             if( location.pathname === '/stateMap'){
-               setTextNameTooltip(`Région : ${d.target.__data__.properties.nom}`);
-               const regionStats = regionStatisticsService.regionLastDataLoader(d.target.__data__.properties.code);
-               setGasPrices(regionStats.prices);
+               try {
+                  setTextNameTooltip(`Région : ${d.target.__data__.properties.nom}`);
+                  const regionStats = regionStatisticsService.regionLastDataLoader(d.target.__data__.properties.code);
+                  setGasPrices(regionStats.prices);
+               } catch (e) {
+                  console.log(e);
+               }
             } else if ( location.pathname === '/regionMap') {
-               setTextNameTooltip(`Département : ${d.target.__data__.properties.nom} - ${d.target.__data__.properties.code}`);
-               const depStats = depStatisticsService.departLastDataLoader(d.target.__data__.properties.code);
-               setGasPrices(depStats.prices);
+               try {
+                  setTextNameTooltip(`Département : ${d.target.__data__.properties.nom} - ${d.target.__data__.properties.code}`);
+                  const depStats = depStatisticsService.departLastDataLoader(d.target.__data__.properties.code);
+                  setGasPrices(depStats.prices);
+               } catch(e) {
+                  console.log(e);
+               }
+              
             }            
         })
         .on("mouseout", function(d) {
@@ -147,7 +148,7 @@ function StateMap(){
                </Col>
             </Row>
             <Row>
-               <Col xs lg={2}><Location onChange={changeLocation} />  </Col>
+               <Col xs lg={2}> {location.pathname ==='/regionMap' ? <></> : <Location onChange={changeLocation} />} </Col>
                <Col xs lg={1}>{location.pathname ==='/regionMap' ? <Back />  : <></>}</Col>
             </Row>
          </div>

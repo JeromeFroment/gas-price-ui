@@ -1,3 +1,4 @@
+import {fetchWithHeaderService} from "./fetchWithHeader.service";
 class FetchDataService {
     constructor() {}
 
@@ -11,23 +12,11 @@ class FetchDataService {
         if(price != null) { url.searchParams.append('price', price); }
         if(fuel != null) { url.searchParams.append('fuel', fuel); }
 
-        fetch(url)
-            .then((response) => response.json())
-            .then((jsonResponse) => {
-                callBack(jsonResponse);
-            }, (error) => {
-                errorCallBack(error);
-            })
+        fetchWithHeaderService.fetchWithHeaders("GET", url, null, callBack, errorCallBack);
     })
 
     getAllGasStation = ((callBack, errorCallBack) => {
-        fetch(this.url)
-            .then((response) => response.json())
-            .then((jsonResponse) => {
-                callBack(jsonResponse);
-            }, (error) => {
-                errorCallBack(error);
-            })
+        fetchWithHeaderService.fetchWithHeaders("GET", this.url, null, callBack, errorCallBack);
     })
 }
 

@@ -7,11 +7,8 @@ export const FilterProvider = ({children}) => {
     const [filter, setFilter] = useState(new FilterModel());
 
     const updateFilter = (newFilter) => {
-        console.log(`Update Filter ! ${newFilter}`);
         setFilter(newFilter);
     }
-
-    console.log(filter)
 
     const value = {filter, updateFilter};
     return (<FilterContext.Provider value={value}>

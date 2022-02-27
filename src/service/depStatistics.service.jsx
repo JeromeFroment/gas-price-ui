@@ -1,17 +1,12 @@
+import {fetchWithHeaderService} from "./fetchWithHeader.service";
+
 class DepStatisticsService {
 
     url = "http://localhost:8080/api/departmental-statistics";
     allDepStats = [];
 
-    getAllDepartmentStats = ((callBack, errorCallBack) => {
-        fetch(this.url)
-            .then((response) => response.json())
-            .then((jsonResponse) => {
-                this.allDepStats = jsonResponse;
-                callBack(jsonResponse);
-            }, (error) => {
-                errorCallBack(error);
-            })
+    getAllDepartmentStats = (() => {
+        fetchWithHeaderService.fetchWithHeaders("GET", this.url, null, null, null);
     })
 
     departLastDataLoader(depCode) {
@@ -21,6 +16,10 @@ class DepStatisticsService {
             }
         }
         return null;
+    }
+
+    setStats(jsonResponse) {
+        this.allDepStats = jsonResponse;
     }
 }
 
