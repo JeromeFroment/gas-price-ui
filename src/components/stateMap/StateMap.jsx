@@ -77,13 +77,22 @@ function StateMap(){
          })
          .on("mouseover", function(d) {
             if( location.pathname === '/stateMap'){
-               setTextNameTooltip(`Région : ${d.target.__data__.properties.nom}`);
-               const regionStats = regionStatisticsService.regionLastDataLoader(d.target.__data__.properties.code);
-               setGasPrices(regionStats.prices);
+               try {
+                  setTextNameTooltip(`Région : ${d.target.__data__.properties.nom}`);
+                  const regionStats = regionStatisticsService.regionLastDataLoader(d.target.__data__.properties.code);
+                  setGasPrices(regionStats.prices);
+               } catch (e) {
+                  console.log(e);
+               }
             } else if ( location.pathname === '/regionMap') {
-               setTextNameTooltip(`Département : ${d.target.__data__.properties.nom} - ${d.target.__data__.properties.code}`);
-               const depStats = depStatisticsService.departLastDataLoader(d.target.__data__.properties.code);
-               setGasPrices(depStats.prices);
+               try {
+                  setTextNameTooltip(`Département : ${d.target.__data__.properties.nom} - ${d.target.__data__.properties.code}`);
+                  const depStats = depStatisticsService.departLastDataLoader(d.target.__data__.properties.code);
+                  setGasPrices(depStats.prices);
+               } catch(e) {
+                  console.log(e);
+               }
+              
             }            
         })
         .on("mouseout", function(d) {
