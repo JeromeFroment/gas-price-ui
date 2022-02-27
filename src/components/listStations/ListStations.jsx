@@ -21,11 +21,19 @@ function ListStations(){
     
     
     const callBack = (jsonResponse) => {
-        setlistStations(jsonResponse.slice(0,10).sort(function(a, b){
-            if(a.address.street < b.address.street) { return -1; }
-            if(a.address.street > b.address.street) { return 1; }
-            return 0;
-        }));
+        if (listStations.length == 0) {
+            setlistStations(jsonResponse.slice(0, 10).sort(function(a, b){
+                if(a.address.street < b.address.street) { return -1; }
+                if(a.address.street > b.address.street) { return 1; }
+                return 0;
+            }));
+        } else {
+            setlistStations(jsonResponse.sort(function(a, b){
+                if(a.address.street < b.address.street) { return -1; }
+                if(a.address.street > b.address.street) { return 1; }
+                return 0;
+            }));
+        }
     }
 
     const errorCallBack = (error) => {
@@ -34,7 +42,15 @@ function ListStations(){
 
     useEffect(() => {
         setlistStations([]);
-        fetchDataService.getListOfGasStation(callBack, errorCallBack,  null, filter.road, null, null, null, filter.price, filter.fuel)
+        let newLim = 10;
+        if (filter.limit != 0) {
+            newLim = filter.limit;
+        }
+        if (newLim == null) {
+            newLim = 10;
+        }
+        console.log(newLim);
+        fetchDataService.getListOfGasStation(callBack, errorCallBack, newLim, filter.road, null, null, null, filter.price, filter.fuel)
     }, [filter])
 
     const setVisibility = (id) => {
@@ -66,7 +82,6 @@ function ListStations(){
                                     ))}
                                 </Row>
                             </div>
-                            
                         ))}
                     </Col>
                     <Col xs={12} lg={5} className="filter">

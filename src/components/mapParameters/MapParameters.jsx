@@ -10,17 +10,19 @@ export default function MapParameters(props){
     const [road, setRoad] = useState("");
     const [price, setPrice] = useState(0);
     const [fuel, setFuel] = useState("");
+    const [limit, setLimit] = useState();
 
     const navigate = useNavigate();
     const filterContext = useContext(FilterContext);
 
     const search = () => {
-        let filter = new FilterModel(road, price, fuel);
+        let filter = new FilterModel(limit, road, price, fuel);
         filter.checkFilters()
         filterContext.updateFilter(filter);
     }
 
     const clear = () => {
+        setLimit(0);
         setRoad("");
         setPrice(0);
         setFuel("");
@@ -32,6 +34,14 @@ export default function MapParameters(props){
         <div id="parameters" className="w-100">
             <h2 id="title-filter">Filtres</h2>
             <Form className="form">
+                {(window.location.href.includes('map'))?
+                    <></>:
+                    <Form.Group>
+                        <Form.Label>Limite de résultats : </Form.Label>
+                        <Form.Control min="0" className="form-input" type="number" value={limit} onChange={(e) => setLimit(e.target.value)}/>
+                    </Form.Group>
+                }
+                
                 <Form.Group>
                     <Form.Label>Type de station : </Form.Label>
                     <Form.Select value={road} onChange={(e) => setRoad(e.target.value)}>
