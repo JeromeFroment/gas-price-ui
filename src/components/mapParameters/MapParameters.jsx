@@ -59,14 +59,8 @@ export default function MapParameters(props){
                     </Form.Select>
                 </Form.Group>
             </Form>
-            <Row className="mt-3">
-                <Col xs lg="3">
-                    <Button variant="primary" onClick={search}>Rechercher</Button>
-                </Col>
-                <Col xs lg="3">
-                    <Button variant="secondary" onClick={clear}>Réinitialiser</Button>
-                </Col>
-            </Row>
+            <button className="form-clear" onClick={clear}>Réinitialiser</button>
+            <button className="form-submit" onClick={search}>Filtrer</button>
         </div>
     )
 }
